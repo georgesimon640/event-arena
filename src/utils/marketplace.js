@@ -11,11 +11,11 @@ export function createEvent(event) {
 
 
 export function changeLocation( Id, _location ) {
-  return window.contract.editDescription( { id: Id, _location: _location }, GAS );
+  return window.contract.changeLocation( { id: Id, _location: _location }, GAS );
 }
 
-export function endEvent( Id ) {
-  return window.contract.endEvent( { id: Id }, GAS );
+export function EndEvent( id ) {
+  return window.contract.endEvent( { id: id }, GAS );
 }
 
 
@@ -23,6 +23,10 @@ export function getEvents() {
   return window.contract.getEvents();
 }
 
-export async function Register({ id, price }) {
+export async function Register({ id, price}) {
   await window.contract.Register({ id: id }, GAS, price);
+}
+
+export async function RegisterAnotheruser({ id, user, price}) {
+  await window.contract.RegisterAnotherUser({ id: id, user: user }, GAS, price);
 }

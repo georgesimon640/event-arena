@@ -42,7 +42,7 @@ const App = function AppWrapper() {
           </main>
         </Container>
       ) : (
-        <Cover name="Event Arena" login={login} coverImg="" />
+        <Cover name="Event Arena" login={login} coverImg="https://miro.medium.com/max/1400/1*ydhn1QPAKsrbt6UWfn3YnA.jpeg" />
       )}
     </>
   );

@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Modal, Form, FloatingLabel } from "react-bootstrap";
 
+
 const AddEvent = ({ save }) => {
   const [title, setTitle] = useState("");
-  const [dateandtime, setDateAndTime] = useState("");
+  const [dateandtime, setDateandTime] = useState("");
   const [image, setImage] = useState("");
   const [description, setDescription] = useState("");
   const [location, setLocation] = useState(0);
@@ -16,6 +17,8 @@ const AddEvent = ({ save }) => {
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+
 
   return (
     <>
@@ -46,19 +49,23 @@ const AddEvent = ({ save }) => {
                 placeholder="Enter title of event"
               />
             </FloatingLabel>
+
             <FloatingLabel
-              controlId="inputDateandTime"
-              label="Date and Time"
+              controlId="inputEndDate"
+              label="Enter date and Time"
               className="mb-3"
             >
               <Form.Control
                 type="text"
-                placeholder="Enter Date and time"
+                placeholder="dateandtime"
                 onChange={(e) => {
-                  setDateAndTime(e.target.value);
+                  setDateandTime(e.target.value);
                 }}
+                
               />
             </FloatingLabel>
+
+            
 
             <FloatingLabel
               controlId="inputImage"

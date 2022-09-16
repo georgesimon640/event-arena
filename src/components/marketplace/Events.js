@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import AddEvent from "./AddEvent";
 import Event from "./Event";
@@ -11,7 +11,8 @@ import {
   Register,
   createEvent,
   changeLocation,
-  endEvent,
+  EndEvent,
+  RegisterAnotheruser
 } from "../../utils/marketplace";
 
 
@@ -22,7 +23,7 @@ const Events = () => {
   const account = window.walletConnection.account();
 
   
-  const getEvents = useCallback(async () => {
+  const getEvents = async () => {
     try {
       setLoading(true);
       setEvents(await getEventList());
@@ -31,7 +32,7 @@ const Events = () => {
     } finally {
       setLoading(false);
     }
-  });
+  };
 
   const addEvent = async (data) => {
     setLoading(true);
@@ -51,11 +52,11 @@ const Events = () => {
 
 
 
-  const endevent = async (Id) => {
+  const endevent = async (id) => {
     setLoading(true);
 
     try {
-      await endEvent(Id).then((resp) => {
+      await EndEvent(id).then((resp) => {
         toast(<NotificationSuccess text="event ended successfully." />);
         getEvents();
       });
@@ -101,6 +102,23 @@ const Events = () => {
     }
   };
 
+  const registeranotherUser = async (id, user, price) => {
+    try {
+      await RegisterAnotheruser({
+        id,
+        user,
+        price,
+      }).then((resp) =>{
+        toast(<NotificationSuccess text="Event applied successfully" />);
+        getEvents()
+      });
+    } catch (error) {
+      toast(<NotificationError text="Failed to apply for event." />);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getEvents();
   }, []);
@@ -121,6 +139,7 @@ const Events = () => {
                 }}
                 key={_event.id}
                 register={register}
+                registeranotherUser={registeranotherUser}
                 changelocation={changelocation}
                 endevent={endevent}
                 isOwner = {account.accountId === _event.owner}

@@ -20,7 +20,7 @@ export async function initializeContract() {
       // List here all view methods
       viewMethods: ["getEvent", "getEvents", "getAttendants"],
       // List call methods that change state
-      changeMethods: ["Register", "setEvent", "changeLocation", "endEvent",],
+      changeMethods: ["Register", "RegisterAnotherUser", "setEvent", "changeLocation", "endEvent",],
     }
   );
 }

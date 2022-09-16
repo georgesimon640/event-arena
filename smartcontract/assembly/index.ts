@@ -2,6 +2,7 @@ import { Event, eventsStorage, attendantsStorage  } from './model';
 import { context, ContractPromiseBatch, u128 } from "near-sdk-as";
 
 
+
  /**
   * @dev buying a ticket for an event from the marketplace
   *   */ 
@@ -13,7 +14,6 @@ export function Register(id: string): void {
     }
     assert(event.owner.toString() != context.sender.toString(),"You cannot Register your own event");
     assert(event.price.toString() == context.attachedDeposit.toString(), "attached deposit should be equal to registration price");
-    assert(event.deadlineRegister >= context.blockTimestamp, "Registering period for event is over");
     
     if(attendants == null){
       attendantsStorage.set(id, [context.sender]);
@@ -40,7 +40,6 @@ export function Register(id: string): void {
     }
     assert(event.owner.toString() != context.sender.toString(),"You cannot Register your own event");
     assert(event.price.toString() == context.attachedDeposit.toString(), "attached deposit should be equal to registration price");
-    assert(event.deadlineRegister >= context.blockTimestamp, "Registering period for event is over");
     // accountIds on testnet ends with .testnet
     assert(user.length > 8, "Invalid accountId for user");
     if(attendants == null){
@@ -66,8 +65,6 @@ export function Register(id: string): void {
   if (storedEvent !== null) {
       throw new Error(`an event with id=${event.id} already exists`);
   }
-  assert(event.deadlineRegister > context.blockTimestamp, "Deadline for registering period has to greater than the current timestamp");
-  assert(event.ends > event.deadlineRegister, "The time event ends has to be greater than the deadline for registering period");
   assert(event.location.length > 0, "Empty location");
   assert(event.image.length > 0, "Empty image url");
   assert(event.title.length > 0, "Empty title");
@@ -109,7 +106,6 @@ export function getAttendants(id: string): string[] | null {
       throw new Error("event not found");
     }
     assert(event.owner.toString() == context.sender.toString(),"You don't have permission to change location");
-    assert(event.deadlineRegister > context.blockTimestamp, "You're unable to change the location of event after the deadline for registering is over");
     assert(_location.length > 0,"New location can't be empty");
     event.changeLocation(_location); 
     eventsStorage.set(event.id, event); 
@@ -126,16 +122,8 @@ export function getAttendants(id: string): string[] | null {
       throw new Error("event not found");
     }
     assert(event.owner.toString() == context.sender.toString(),"Only the owner can end the event");
-    assert(event.ends > context.blockTimestamp, "Event isn't over yet");
-    attendantsStorage.delete(event.id);
-    eventsStorage.delete(event.id); 
+   event.endevent();
+   eventsStorage.set(event.id, event);
   }
-
-
-  
-
-
-
-
  
 

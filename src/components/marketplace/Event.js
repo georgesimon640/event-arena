@@ -3,10 +3,13 @@ import PropTypes from "prop-types";
 import { utils } from "near-api-js";
 import { Card, Button, Col, Badge, Stack, Form } from "react-bootstrap";
 import { useState } from "react";
+import moment from "moment";
+
 
 const Event = ({
 	event,
 	register,
+	registeranotherUser,
 	changelocation,
 	endevent,
 	isOwner,
@@ -21,12 +24,21 @@ const Event = ({
 		price,
 		owner,
 		attendants,
+		ended,
 	} = event;
 
+
 	const [newLocation, setNewLocation] = useState("");
+	const [user, setUser] = useState("");
+
+	
 
 	const triggerRegister = () => {
 		register(id, price);
+	};
+
+	const triggerRegisterAnotherUser = () => {
+		registeranotherUser(id, user, price);
 	};
 
 	const triggerChangeLocation = () => {
@@ -64,12 +76,16 @@ const Event = ({
 						{description}
 					</Card.Text>
 					<Card.Text className="text-secondary">
-						<span>{dateandtime}</span>
+						<span>Event Date and Time: {dateandtime}</span>
 					</Card.Text>
-
 					
 
-					{isOwner === true && (
+					{ended === true && (
+						<Card.Title>This Event has ended</Card.Title>
+					
+					)}
+
+					{isOwner === true && ended === false &&(
 						<>
 							<Form.Control
 								className={"pt-2 mb-1"}
@@ -90,7 +106,7 @@ const Event = ({
 						</>
 					)}
 
-					{isOwner === true && (
+					{isOwner === true && ended === false && (
 						<>
 							<Button
 								variant="primary"
@@ -104,15 +120,36 @@ const Event = ({
 
 					
 
-					{isOwner !== true && (
+					{isOwner !== true && ended === false && (
 						<Button
 							variant="outline-dark"
 							onClick={triggerRegister}
-							className="w-100 py-3"
+							className="w-100 py-3 mb-4"
 						>
 							Register for {utils.format.formatNearAmount(price)} NEAR
 						</Button>
 					
+					)}
+
+{isOwner !== true && ended === false && (
+						<>
+							<Form.Control
+								className={"pt-2 mb-1"}
+								type="text"
+								placeholder="Enter user"
+								onChange={(e) => {
+									setUser(e.target.value);
+								}}
+							/>
+
+							<Button
+								variant="primary"
+								className={"mb-4"}
+								onClick={() => triggerRegisterAnotherUser()}
+							>
+								Register User
+							</Button>
+						</>
 					)}
 				</Card.Body>
 			</Card>
